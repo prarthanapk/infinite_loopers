@@ -98,8 +98,10 @@ Styling for math & compliment outputs
 
 📸 Screenshots
 https://drive.google.com/drive/folders/14ZTjDfbwGtwWPchEZ6c5t3rZQoXgdGBq?usp=sharing
-Project Demos
+Project Demo and videos
 https://drive.google.com/drive/folders/1AOhNsmBx4hwVFeIA4zkTJqPQSHs22E5l?usp=sharing
+code:
+https://drive.google.com/drive/folders/1zzrx0H0MaShmkgsVLC1Klj0i_vf75nhO?usp=sharing
 
 📜 License
 This project is proudly licensed under the "Why Not" License — do whatever you want.
