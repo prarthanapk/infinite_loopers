@@ -1,0 +1,31 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #db1e99;
+  color: rgb(2, 14, 22);
+  text-align: center;
+  padding: 2rem;
+}
+
+#editor {
+  margin: 2rem auto;
+  padding: 1rem;
+  width: 80%;
+  min-height: 200px;
+  border: 2px solid rgb(240, 235, 239);
+  background-color: #ab6fa9;
+  text-align: left;
+  white-space: pre-wrap;
+  font-size: 1.2rem;
+}
+
+#message {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+canvas {
+  width: 100%;
+  height: 20px;
+  background: #ab6fa9;
+  margin-top: 2rem;
+}
