@@ -3,6 +3,7 @@ Infinite Loopers: The Digital Absurdity Engine
 
 👥 Team
 Team Lead: Nashwa SP — Jyothi Engineering College
+
 Member: Prarthana PK — Jyothi Engineering College
 
 💡 Project Description
