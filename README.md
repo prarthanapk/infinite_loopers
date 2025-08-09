@@ -7,7 +7,7 @@
 
 ## 👥 Team
 - **Team Name:** Infinite Loopers  
-- **Team Lead:** Nashwa – Jyothi Engineering College  
+- **Team Lead:** Nashwa SP – Jyothi Engineering College  
 - **Member 2:** Prarthana PK – Jyothi Engineering College  
 
 ---
