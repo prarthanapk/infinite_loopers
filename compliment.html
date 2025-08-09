@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compliment AI</title>
+    <!-- Use Tailwind CSS for a modern, responsive look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Courier New', 'monospace'],
+                        'press-start': ['"Press Start 2P"', 'cursive'],
+                    },
+                    colors: {
+                        'primary-bg': '#0a0a0a',
+                        'neon-green': '#00ff41',
+                        'neon-pink': '#ff005c',
+                        'neon-blue': '#00aaff',
+                        'neon-yellow': '#ffff00',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .compliment-box {
+            animation: fade-in-scale 0.5s ease-out forwards;
+        }
+
+        @keyframes fade-in-scale {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .shimmer {
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0.5),
+                rgba(255, 255, 255, 0)
+            );
+            background-size: 200% 100%;
+            background-position: -200% 0;
+            animation: shimmer-anim 4s infinite linear;
+        }
+
+        @keyframes shimmer-anim {
+            to {
+                background-position: 200% 0;
+            }
+        }
+
+        /* NEW ANIMATION FOR FLOATING COMPLIMENTS */
+        @keyframes float-up {
+            0% { opacity: 0; transform: translateY(0) scale(0.8); }
+            20% { opacity: 1; transform: translateY(-20px) scale(1); }
+            80% { opacity: 1; transform: translateY(-80px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+        }
+
+        .floating-compliment {
+            position: absolute;
+            z-index: 20;
+            padding: 1rem;
+            border-radius: 9999px;
+            font-family: 'Press Start 2P', cursive;
+            background-color: #00aaff;
+            color: #0a0a0a;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            animation: float-up 3s ease-out forwards;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-primary-bg text-white min-h-screen relative overflow-hidden flex flex-col justify-center items-center p-8">
+    
+    <div class="relative z-10 text-center max-w-xl w-full">
+        <a href="/" class="absolute -top-16 left-0 text-neon-green font-mono flex items-center hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Lab
+        </a>
+
+        <h1 class="text-4xl font-press-start text-neon-pink drop-shadow-lg">
+            Compliment AI
+        </h1>
+        <p class="mt-2 text-sm font-mono text-gray-400">
+            For when your ego needs a cosmic boost.
+        </p>
+
+        <div class="mt-12 compliment-box p-6 border-2 border-neon-blue rounded-xl bg-gray-900 shadow-xl">
+            <p id="compliment-text" class="text-xl font-press-start text-neon-yellow drop-shadow shimmer">
+                Click the button below to receive an absurdly specific compliment.
+            </p>
+        </div>
+
+        <button id="get-compliment-button" class="mt-8 px-8 py-4 bg-neon-green text-gray-900 font-press-start rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95">
+            Give me more 💗
+        </button>
+
+        <!-- NEW: BUTTON TO TRIGGER FLOATING COMPLIMENTS -->
+        <button id="floating-button" class="mt-4 px-8 py-2 text-sm text-neon-green font-press-start hover:underline">
+            Or, just click here to get a random one.
+        </button>
+    </div>
+
+    <script>
+        const complimentText = document.getElementById('compliment-text');
+        const getComplimentButton = document.getElementById('get-compliment-button');
+        const floatingButton = document.getElementById('floating-button');
+        const body = document.body;
+
+        async function fetchCompliment() {
+            try {
+                const response = await fetch('/api/get_compliment');
+                const data = await response.json();
+                return data.compliment;
+            } catch (error) {
+                console.error("Failed to fetch compliment:", error);
+                return "Error: Failed to fetch compliment.";
+            }
+        }
+
+        getComplimentButton.addEventListener('click', async () => {
+            const compliment = await fetchCompliment();
+            
+            // Clear the shimmer animation and apply the fade-in
+            complimentText.classList.remove('shimmer');
+            complimentText.textContent = compliment;
+            complimentText.style.animation = 'none';
+            void complimentText.offsetWidth; // Trigger reflow
+            complimentText.style.animation = 'fade-in-scale 0.5s ease-out forwards';
+        });
+
+        floatingButton.addEventListener('click', async () => {
+            const compliment = await fetchCompliment();
+            const complimentBubble = document.createElement('div');
+            complimentBubble.textContent = compliment;
+            complimentBubble.className = 'floating-compliment';
+            
+            // Position the bubble at a random location
+            const randomX = Math.random() * (window.innerWidth - 300); // 300px width for bubble
+            const randomY = Math.random() * (window.innerHeight - 100); // 100px height for bubble
+            
+            complimentBubble.style.left = `${randomX}px`;
+            complimentBubble.style.top = `${randomY}px`;
+            
+            body.appendChild(complimentBubble);
+            
+            setTimeout(() => {
+                complimentBubble.remove();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

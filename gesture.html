@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gesture Control (Web Version)</title>
+</head>
+<body>
+    <h1>🖐 Browser Gesture Control</h1>
+    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+    <p id="status">Loading...</p>
+
+    <script>
+        async function init() {
+            const video = document.getElementById('webcam');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                document.getElementById("status").innerText = "Camera Ready!";
+            } catch (err) {
+                document.getElementById("status").innerText = "Camera access denied!";
+            }
+        }
+        init();
+    </script>
+</body>
+</html>

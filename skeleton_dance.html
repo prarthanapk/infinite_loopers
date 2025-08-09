@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useless Dancing Skeleton</title>
+    <!-- Use Tailwind CSS for a modern, responsive look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Courier New', 'monospace'],
+                    },
+                    colors: {
+                        'primary-dark': '#4b0082',
+                        'accent-pink': '#ff69b4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap');
+        body {
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans overflow-hidden">
+    <!-- Header -->
+    <header class="absolute top-0 left-0 w-full p-6 z-10 flex flex-col items-center text-center">
+        <a href="/" class="self-start text-accent-pink font-semibold text-lg flex items-center mb-4 transition-colors duration-300 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Lab
+        </a>
+        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mt-4 font-['Press Start 2P']">
+            🕺 Useless Dance Party
+        </h1>
+        <p class="text-lg text-gray-400 mt-2">
+            Warning: This may cause spontaneous joy.
+        </p>
+    </header>
+
+    <!-- Canvas for the 3D scene -->
+    <canvas id="skeletonCanvas"></canvas>
+
+    <!-- three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+   
+    <script>
+        // Start the animation loop on window load
+        window.onload = function () {
+            animate();
+        };
+   
+        // --- Setup the 3D Scene ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.getElementById('skeletonCanvas') });
+       
+        // Set renderer size and pixel ratio for high-quality rendering
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true; // Enable shadows
+
+        // Adjust camera position
+        camera.position.z = 10;
+        camera.position.y = 2;
+
+        // --- Lighting ---
+        // Ambient light for general illumination
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Directional light for shadows and a more dramatic look
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // --- Create the Dancing Skeleton ---
+        const skeletonGroup = new THREE.Group();
+       
+        // Body parts definitions (as a simplified array for easier creation)
+        const parts = [
+            { name: 'head', geometry: new THREE.SphereGeometry(1, 16, 16), color: 0xfafafa, position: { x: 0, y: 5, z: 0 } },
+            { name: 'torso', geometry: new THREE.CylinderGeometry(0.5, 0.8, 3, 8), color: 0xfafafa, position: { x: 0, y: 3, z: 0 } },
+            { name: 'leftArm', geometry: new THREE.CylinderGeometry(0.2, 0.2, 2.5, 8), color: 0xfafafa, position: { x: -1.5, y: 4, z: 0 } },
+            { name: 'rightArm', geometry: new THREE.CylinderGeometry(0.2, 0.2, 2.5, 8), color: 0xfafafa, position: { x: 1.5, y: 4, z: 0 } },
+            { name: 'leftLeg', geometry: new THREE.CylinderGeometry(0.3, 0.3, 3, 8), color: 0xfafafa, position: { x: -1.2, y: 0, z: 0 } },
+            { name: 'rightLeg', geometry: new THREE.CylinderGeometry(0.3, 0.3, 3, 8), color: 0xfafafa, position: { x: 1.2, y: 0, z: 0 } },
+        ];
+
+        // Create a simple bone-like material
+        const boneMaterial = new THREE.MeshPhongMaterial({ color: 0xfafafa, shininess: 30 });
+
+        // Iterate through the parts and create the meshes
+        parts.forEach(part => {
+            const mesh = new THREE.Mesh(part.geometry, boneMaterial);
+            mesh.position.set(part.position.x, part.position.y, part.position.z);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            skeletonGroup.add(mesh);
+            // Store a reference for animation
+            skeletonGroup.userData[part.name] = mesh;
+        });
+
+        // Create a floor
+        const floorGeometry = new THREE.PlaneGeometry(30, 30);
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2; // Rotate to be horizontal
+        floor.position.y = -1.5;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Add the entire skeleton to the scene
+        scene.add(skeletonGroup);
+
+        // --- Animation Loop ---
+        const clock = new THREE.Clock();
+        const amplitude = 0.5; // Max rotation angle
+        const frequency = 2; // Speed of the dance
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // Simple "dancing" animation for the skeleton parts
+            skeletonGroup.userData.head.rotation.y = Math.sin(elapsedTime * frequency * 1.5) * amplitude * 0.5;
+            skeletonGroup.userData.leftArm.rotation.z = Math.sin(elapsedTime * frequency) * amplitude;
+            skeletonGroup.userData.rightArm.rotation.z = Math.sin(elapsedTime * frequency) * -amplitude;
+            skeletonGroup.userData.leftLeg.rotation.x = Math.sin(elapsedTime * frequency * 0.8) * amplitude * 0.8;
+            skeletonGroup.userData.rightLeg.rotation.x = Math.sin(elapsedTime * frequency * 0.8) * -amplitude * 0.8;
+           
+            // Rotate the whole skeleton for more chaotic fun
+            skeletonGroup.rotation.y += 0.005;
+
+            renderer.render(scene, camera);
+        }
+
+        // --- User Interaction for Camera Control ---
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        const canvas = renderer.domElement;
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaMove = {
+                    x: e.offsetX - previousMousePosition.x,
+                    y: e.offsetY - previousMousePosition.y
+                };
+               
+                // Rotate the skeleton based on mouse movement
+                const rotationSpeed = 0.005;
+                skeletonGroup.rotation.y += deltaMove.x * rotationSpeed;
+                skeletonGroup.rotation.x += deltaMove.y * rotationSpeed;
+
+                // Clamp the x rotation to prevent it from flipping
+                skeletonGroup.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, skeletonGroup.rotation.x));
+            }
+            previousMousePosition = { x: e.offsetX, y: e.offsetY };
+        });
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>

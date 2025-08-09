@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #000;
+            color: #0f0;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <p>{{ emoji }} {{ message }}</p>
+    <p>Close the gesture window or wait to return home...</p>
+    <script>
+        setTimeout(() => {
+            window.location.href = "/";
+        }, 10000); // 10 seconds
+    </script>
+</body>
+</html>
+
+
+

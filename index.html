@@ -1,0 +1,188 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFINITE-LOOPERS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Courier New', 'monospace'],
+                    },
+                    colors: {
+                        'primary-light': '#f8d7ff',
+                        'primary-dark': '#4b0082',
+                        'accent-pink': '#ff69b4',
+                        'accent-purple': '#8a2be2',
+                        'accent-green': '#32cd32',
+                        'accent-orange': '#ffa500',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8d7ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .hero-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            background-color: #2c3e50;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #heroCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .project-grid {
+            display: grid;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        @media (min-width: 640px) {
+            .project-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .project-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        .project-card {
+            text-decoration: none;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+        }
+        .project-card h2 {
+            font-family: 'Press Start 2P', cursive;
+            margin: 0.5rem 0;
+        }
+        .wave-card { background-color: #ff69b4; }
+        .scream-card { background-color: #8a2be2; }
+        .math-card { background-color: #32cd32; }
+        .compliment-card { background-color: #ffa500; }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-canvas-container">
+        <div class="hero-content">
+            <h1 class="text-4xl lg:text-6xl font-extrabold font-['Press Start 2P']">
+                Useless Projects Lab
+            </h1>
+            <p class="text-lg lg:text-xl mt-2 italic">Where productivity goes to die.</p>
+        </div>
+        <canvas id="heroCanvas"></canvas>
+    </div>
+
+    <!-- Projects -->
+    <div class="project-grid">
+        <a href="/wave" class="project-card wave-card" target="_blank">
+            <span class="text-4xl">👋</span>
+            <h2>Wave.exe</h2>
+            <p>Gesture-Controlled Chaos</p>
+            <p class="description">Wave your hand to trigger utter nonsense</p>
+        </a>
+        <a href="/type_scream" class="project-card scream-card" target="_blank">
+            <span class="text-4xl">🎤</span>
+            <h2>Type-Scream</h2>
+            <p>Shout Your Way to Text</p>
+            <p class="description">Because keyboards are for the weak</p>
+        </a>
+        <a href="/useless_math" class="project-card math-card" target="_blank">
+            <span class="text-4xl">🔢</span>
+            <h2>Useless Math</h2>
+            <p>Calculations with Bananas</p>
+            <p class="description">42 × Infinity ÷ Banana = ?</p>
+        </a>
+        <a href="/self_love" class="project-card compliment-card" target="_blank">
+            <span class="text-4xl">💗</span>
+            <h2>Compliment AI</h2>
+            <p>Self-Love Machine</p>
+            <p class="description">Overly dramatic ego boosts</p>
+        </a>
+    </div>
+
+    <!-- three.js for Dancing Skeleton -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.getElementById('heroCanvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        camera.position.z = 10;
+        camera.position.y = 2;
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 10, 7.5);
+        scene.add(dirLight);
+
+        const skeletonGroup = new THREE.Group();
+        const parts = [
+            { name: 'head', geo: new THREE.SphereGeometry(1, 16, 16), y: 5 },
+            { name: 'torso', geo: new THREE.CylinderGeometry(0.5, 0.8, 3, 8), y: 3 },
+            { name: 'leftArm', geo: new THREE.CylinderGeometry(0.2, 0.2, 2.5, 8), x: -1.5, y: 4 },
+            { name: 'rightArm', geo: new THREE.CylinderGeometry(0.2, 0.2, 2.5, 8), x: 1.5, y: 4 },
+            { name: 'leftLeg', geo: new THREE.CylinderGeometry(0.3, 0.3, 3, 8), x: -1.2, y: 0 },
+            { name: 'rightLeg', geo: new THREE.CylinderGeometry(0.3, 0.3, 3, 8), x: 1.2, y: 0 },
+        ];
+        const mat = new THREE.MeshPhongMaterial({ color: 0xfafafa, shininess: 30 });
+        parts.forEach(p => {
+            const mesh = new THREE.Mesh(p.geo, mat);
+            mesh.position.set(p.x || 0, p.y, 0);
+            skeletonGroup.add(mesh);
+            skeletonGroup.userData[p.name] = mesh;
+        });
+        scene.add(skeletonGroup);
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+            skeletonGroup.userData.head.rotation.y = Math.sin(t * 3) * 0.25;
+            skeletonGroup.userData.leftArm.rotation.z = Math.sin(t * 2) * 0.5;
+            skeletonGroup.userData.rightArm.rotation.z = Math.sin(t * 2) * -0.5;
+            skeletonGroup.userData.leftLeg.rotation.x = Math.sin(t * 1.6) * 0.4;
+            skeletonGroup.userData.rightLeg.rotation.x = Math.sin(t * 1.6) * -0.4;
+            skeletonGroup.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
