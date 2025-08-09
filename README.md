@@ -1,5 +1,6 @@
 ---
-Infinite Loopers — A Celebration of Pointless Genius
+ Infinite Loopers: The Digital Absurdity Engine
+"Embrace the loop - A Celebration of Pointless Genius
 Because productivity is overrated.
 
 👥 Team
