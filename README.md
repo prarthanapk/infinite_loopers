@@ -58,13 +58,10 @@ Due to GitHub’s 100 MB file size limit, we couldn’t upload our `.exe` file d
 🔗 **[Download Infinite Loopers Executable (Google Drive)](https://drive.google.com/drive/folders/1zzrx0H0MaShmkgsVLC1Klj0i_vf75nhO?usp=sharing)**  
 
 ---
-Distribution Plan & Hosting Limitations
+📤 Distribution Plan & Hosting Limitations
+Offline Mode: Windows .exe — no Python required.
 
-Our initial plan was to provide Infinite Loopers as a fully offline experience:
-
-Packaged into a Windows executable (.exe) so anyone could run it without installing Python or dependencies.
-
-Optionally as a Python package (pip install infinite-loopers) for developers who prefer running it via command line.
+Developer Mode: pip install infinite-loopers (planned).
 
 However, the compiled .exe is ~450 MB, which:
 
