@@ -60,10 +60,10 @@ Due to GitHub’s 100 MB file size limit, we couldn’t upload our `.exe` file d
 ---
 📤 Distribution Plan & Hosting Limitations
 Offline Mode: Windows .exe — no Python required.
+
 Developer Mode: pip install infinite-loopers (planned).
 
-However, the compiled .exe is ~450 MB, which:
-Exceeds GitHub’s 100 MB per-file limit, preventing us from hosting it directly on the repository.
+.exe size: ~450 MB → exceeds GitHub limit, hence hosted externally.
 ---
 
 ## 📸 Screenshots & 🎥 Demos  
