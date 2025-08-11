@@ -67,7 +67,9 @@ Packaged into a Windows executable (.exe) so anyone could run it without install
 Optionally as a Python package (pip install infinite-loopers) for developers who prefer running it via command line.
 
 However, the compiled .exe is ~450 MB, which:
+
 Exceeds GitHub’s 100 MB per-file limit, preventing us from hosting it directly on the repository.
+---
 
 ## 📸 Screenshots & 🎥 Demos  
 📷 **Screenshots:** [View here](https://drive.google.com/drive/folders/14ZTjDfbwGtwWPchEZ6c5t3rZQoXgdGBq?usp=sharing)  
